@@ -1,6 +1,7 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +31,17 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String[] words = phrase.split("\\W+");
+		
+		String acro = "";
+		
+		for (int i = 0; i < words.length; i++) {
+			acro += Character.toString(words[i].charAt(0));
+		}
+		
+		acro.toUpperCase();
+		
+		return acro;
 	}
 
 	/**
@@ -84,17 +94,38 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
+			
+			if (getSideOne() == getSideTwo() && 
+					getSideOne() == getSideThree()) 
+			{
+				return true;
+			}
+			
 			return false;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
+			
+			if (getSideOne() == getSideTwo() ||
+					getSideOne()== getSideThree() ||
+					getSideTwo() == getSideThree()) 
+			{
+				return true;
+			}
+			
+			
 			return false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
+			
+			if(getSideOne() != getSideTwo() &&
+					getSideOne() != getSideThree() &&
+					getSideTwo() != getSideThree()) 
+			{
+				return true;
+			}
+			
 			return false;
 		}
 
@@ -116,8 +147,72 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		
+		int value = 0;
+		
+		string = string.toUpperCase();
+		
+		for (int i = 0; i < string.length(); i++) {
+			
+			char letter = string.charAt(i);
+			
+			if (letter == 'A' || letter == 'E' ||
+				letter == 'I' || letter == 'O' ||
+				letter == 'U' || letter == 'L' ||
+				letter == 'N' || letter == 'R' ||
+				letter == 'S' || letter == 'T') 
+			{
+				
+				value += 1;
+				
+			}
+			else if (letter == 'D' || letter == 'G') 
+			{
+				
+				value += 2;
+				
+			}
+			else if (letter == 'B' || letter == 'C' ||
+					letter == 'M' || letter == 'P') 
+			{
+				
+				value += 3;
+				
+			}
+			
+			else if (letter == 'F' || letter == 'H' ||
+					letter == 'V' || letter == 'W' ||
+					letter == 'Y') 
+			{
+				
+				value += 4;
+				
+			}
+			
+			else if (letter == 'K') 
+			{
+				
+				value += 5;
+				
+			}
+			
+			else if (letter == 'J' || letter == 'X') 
+			{
+				
+				value += 8;
+				
+			}
+			
+			else
+			{
+				
+				value += 10;
+				
+			}
+			
+		}
+		
+		return value;
 	}
 
 	/**
@@ -152,8 +247,19 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		
+		String number = string.replaceAll("\\W+", "");
+		
+		if (number.charAt(0) == '1') {
+			
+			number = number.replace(number.charAt(0), ' ');
+		}
+		
+		if (number.length() != 10) {
+			throw new IllegalArgumentException();
+		}
+	
+		return number;
 	}
 
 	/**
@@ -166,8 +272,19 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String[] phrase = string.split("\\W+");
+		Map<String, Integer> words = new HashMap<String, Integer>();
+		for (String i : phrase) {
+			
+			if(!words.containsKey(i)) {
+				words.put(i, 1);
+			}
+			else {
+				int count = words.get(i);
+				words.put(i, count + 1);
+			}
+		}
+		return words;
 	}
 
 	/**
@@ -281,7 +398,7 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
+		
 		return null;
 	}
 
@@ -339,8 +456,30 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		
+		int count, check;
+		
+		if(i < 2) {
+			throw new IllegalArgumentException();
+		}
+		
+		for (check = 2, count = 0; count < i; check++) {
+			if(isPrime(check)) {
+				count++;
+			}
+		}
+		
+		return check - 1;
+		
+	}
+	
+	private static boolean isPrime(int n) {
+	    for(int i = 2; i < n; ++i) {
+	        if (n % i == 0) {
+	            return false;
+	        }
+	    }
+	    return true;
 	}
 
 	/**
