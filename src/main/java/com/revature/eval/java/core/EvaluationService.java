@@ -1,9 +1,16 @@
 package com.revature.eval.java.core;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.Month;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class EvaluationService {
 
@@ -36,10 +43,10 @@ public class EvaluationService {
 		String acro = "";
 		
 		for (int i = 0; i < words.length; i++) {
-			acro += Character.toString(words[i].charAt(0));
+			acro += Character.toString(words[i].charAt(0)).toUpperCase();
 		}
 		
-		acro.toUpperCase();
+		//acro.toUpperCase();
 		
 		return acro;
 	}
@@ -274,14 +281,14 @@ public class EvaluationService {
 	public Map<String, Integer> wordCount(String string) {
 		String[] phrase = string.split("\\W+");
 		Map<String, Integer> words = new HashMap<String, Integer>();
-		for (String i : phrase) {
+		for (String word : phrase) {
 			
-			if(!words.containsKey(i)) {
-				words.put(i, 1);
+			if(!words.containsKey(word)) {
+				words.put(word, 1);
 			}
 			else {
-				int count = words.get(i);
-				words.put(i, count + 1);
+				int count = words.get(word);
+				words.put(word, count + 1);
 			}
 		}
 		return words;
@@ -322,11 +329,12 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch<T> {
+	static class BinarySearch <T extends Comparable <T>>{
+		
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
+			
 			return 0;
 		}
 
@@ -363,8 +371,38 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+//		
+//		String [] words = string.split("\\W+");
+//		
+//		char [] vowels = new char[] {'a','e','i','o','u','y'};
+//				
+//		char first = string.charAt(0);
+//		
+//		for(int j = 0; j < words.length; j++) {
+//		
+//			boolean check = false;
+//		
+//			for(int i = 0; i < vowels.length; i++) {
+//				if (first == vowels[i]) {
+//					check = true;
+//					break;
+//				}
+//				else {
+//					String temp = words[j];
+//					temp += first;
+//					//words[j] += first;
+//					words[j] = words[j].replace(words[j].charAt(0),' ');
+//					//somehow remove the first letter of the string
+//					//temp = words[j].replaceFirst(, "");
+//					first = temp.charAt(0);
+//				}
+//			}
+//			
+//			string += "ay";
+//			
+//		}
+		
+		return string;
 	}
 
 	/**
@@ -383,7 +421,36 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
+		
+		int [] values = new int[5];
+		
+		int temp = input;
+		
+		int count = 0;
+		
+		int digit;
+		
+		int sum = 0;
+		
+		while (input > 0) {
+			digit = input % 10;
+			input = input / 10;
+			
+			values[count] = digit;
+			count++;
+		}
+		
+		int[] valueSet = new int[count];
+		
+		for (int i = 0; i < valueSet.length; i++) {
+			valueSet[i] = values[i];
+			sum += Math.pow(valueSet[i],valueSet.length);
+		}
+		
+		if (sum == temp) {
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -458,6 +525,10 @@ public class EvaluationService {
 	public int calculateNthPrime(int i) {
 		
 		int count, check;
+		
+		if(i == 1) {
+			return 2;
+		}
 		
 		if(i < 2) {
 			throw new IllegalArgumentException();
@@ -554,10 +625,11 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
+		
+		String [] phrase = string.split("-");
+		
 		return false;
 	}
-
 	/**
 	 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γράμμα, pan
 	 * gramma, "every letter") is a sentence using every letter of the alphabet at
@@ -572,7 +644,21 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
+		
+		string = string.replaceAll("\\W+", "");
+		
+		char [] letters = string.toCharArray();
+		
+		Set<Character> set = new HashSet<Character>();
+		
+		for (char c : letters) {
+			set.add(c);
+		}
+		
+		if(set.size() == 26) {
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -584,9 +670,11 @@ public class EvaluationService {
 	 * @param given
 	 * @return
 	 */
-	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Write an implementation for this method declaration
-		return null;
+	public Temporal getGigasecondDate (Temporal given){
+		
+		long time = 1000000000;
+		
+		return given;
 	}
 
 	/**
