@@ -1,9 +1,7 @@
 package com.revature.eval.java.core;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.Month;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.HashMap;
@@ -45,8 +43,6 @@ public class EvaluationService {
 		for (int i = 0; i < words.length; i++) {
 			acro += Character.toString(words[i].charAt(0)).toUpperCase();
 		}
-		
-		//acro.toUpperCase();
 		
 		return acro;
 	}
@@ -371,36 +367,59 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-//		
-//		String [] words = string.split("\\W+");
-//		
-//		char [] vowels = new char[] {'a','e','i','o','u','y'};
-//				
-//		char first = string.charAt(0);
-//		
-//		for(int j = 0; j < words.length; j++) {
-//		
-//			boolean check = false;
-//		
-//			for(int i = 0; i < vowels.length; i++) {
-//				if (first == vowels[i]) {
-//					check = true;
-//					break;
-//				}
-//				else {
-//					String temp = words[j];
-//					temp += first;
-//					//words[j] += first;
-//					words[j] = words[j].replace(words[j].charAt(0),' ');
-//					//somehow remove the first letter of the string
-//					//temp = words[j].replaceFirst(, "");
-//					first = temp.charAt(0);
-//				}
-//			}
-//			
-//			string += "ay";
-//			
-//		}
+		
+		char [] vowels = new char [] {'a','e','i','o','u'};
+		
+		String [] words = string.split(" ");
+
+		char first;
+		
+		String phrase = "";
+		
+		for(int i = 0; i < words.length; i++) {
+			
+			phrase = words[i];
+			
+			first = phrase.charAt(0);
+			
+			for (int j = 0; j < vowels.length; j++) {
+				
+				if (first == vowels[j]) {
+					words[i] = phrase + "ay";
+					break;
+				}
+				
+				if (first == 'q') {
+					String temp = "";
+					temp += first;
+					temp += phrase.charAt(1);
+					phrase += temp;
+					phrase = phrase.substring(2);
+					first = phrase.charAt(0);
+					words[i] = phrase + "ay";
+					break;
+				}
+			}
+			String temp = "" + first;
+			
+			while (!(new String(vowels).contains(temp))) {
+				
+			    phrase += first;
+			    phrase = phrase.substring(1);
+			    first = phrase.charAt(0);
+			    temp = "" + first;
+			    words[i] = phrase + "ay"; 
+			}
+		}
+		String finalWord = "";
+		
+		for (int k = 0; k < words.length; k++) {
+			finalWord += words[k] + " ";
+		}
+		
+		finalWord = finalWord.trim();
+		
+		string = finalWord;
 		
 		return string;
 	}
@@ -504,8 +523,49 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			
+			int upper = (int) ('A');
+			
+			int lower = (int) ('a');
+			
+			String word = "";
+			
+			int letter = 0;
+			
+			for (int i = 0; i < string.length(); i++) {
+				
+				letter = (int) string.charAt(i);
+				
+				if (!Character.isAlphabetic(letter)) {
+					word +=  (char) letter;
+					continue;
+				}
+				
+				if (Character.isUpperCase(letter)) {
+					
+					letter -= upper;
+					letter += key;
+					letter %= 26;
+					letter += upper;
+
+				}
+				else {
+					
+					letter -= lower;
+					letter += key;
+					letter %= 26;
+					letter += lower;
+					
+				}
+				
+				if (letter < 0) {
+					letter += 26;
+				}
+				
+				word += (char) letter;
+			}
+			
+			return word;
 		}
 
 	}
@@ -586,8 +646,67 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			
+			Map<String,String> letters = new HashMap<>();
+			
+			string = string.replaceAll(" ", "");
+			
+			string = string.replaceAll(",", "");
+			
+			string = string.replaceAll("\\.", "");
+			
+			string = string.toLowerCase();
+			
+			String [] value = string.split("");
+		
+			letters.put("a", "z");
+			letters.put("b", "y");
+			letters.put("c", "x");
+			letters.put("d", "w");
+			letters.put("e", "v");
+			letters.put("f", "u");
+			letters.put("g", "t");
+			letters.put("h", "s");
+			letters.put("i", "r");
+			letters.put("j", "q");
+			letters.put("k", "p");
+			letters.put("l", "o");
+			letters.put("m", "n");
+			letters.put("n", "m");
+			letters.put("o", "l");
+			letters.put("p", "k");
+			letters.put("q", "j");
+			letters.put("r", "i");
+			letters.put("s", "h");
+			letters.put("t", "g");
+			letters.put("u", "f");
+			letters.put("v", "e");
+			letters.put("w", "d");
+			letters.put("x", "c");
+			letters.put("y", "b");
+			letters.put("z", "a");
+			letters.put("1", "1");
+			letters.put("2", "2");
+			letters.put("3", "3");
+			
+			String word = "";
+			
+			for (int i = 0; i < value.length; i++) {
+				
+				if ((i) % 5 == 0 && i != 0) {
+					word += " ";
+				}
+				
+				if (letters.containsKey(value[i])) {
+					word += letters.get(value[i]);
+				}
+				else {
+					word += "";
+				}
+				
+			}
+			
+			return word;
 		}
 
 		/**
@@ -597,9 +716,67 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			
+			Map<String,String> letters = new HashMap<>();
+			
+			string = string.replaceAll(" ", "");
+			
+			string = string.replaceAll(",", "");
+			
+			string = string.replaceAll("\\.", "");
+			
+			string = string.toLowerCase();
+			
+			String [] value = string.split("");
+			
+			letters.put("z", "a");
+			letters.put("y", "b");
+			letters.put("x", "c");
+			letters.put("w", "d");
+			letters.put("v", "e");
+			letters.put("u", "f");
+			letters.put("t", "g");
+			letters.put("s", "h");
+			letters.put("r", "i");
+			letters.put("q", "j");
+			letters.put("p", "k");
+			letters.put("o", "l");
+			letters.put("n", "m");
+			letters.put("m", "n");
+			letters.put("l", "o");
+			letters.put("k", "p");
+			letters.put("j", "q");
+			letters.put("i", "r");
+			letters.put("h", "s");
+			letters.put("g", "t");
+			letters.put("f", "u");
+			letters.put("e", "v");
+			letters.put("d", "w");
+			letters.put("c", "x");
+			letters.put("b", "y");
+			letters.put("a", "z");
+			letters.put("1", "1");
+			letters.put("2", "2");
+			letters.put("3", "3");
+			
+			
+			String word = "";
+			
+			for (int i = 0; i < value.length; i++) {
+				
+				if (letters.containsKey(value[i])) {
+					word += letters.get(value[i]);
+				}
+				else {
+					word += "";
+				}
+				
+			}
+			
+			return word;
 		}
+			
+			
 	}
 
 	/**
@@ -672,9 +849,42 @@ public class EvaluationService {
 	 */
 	public Temporal getGigasecondDate (Temporal given){
 		
-		long time = 1000000000;
+		long time = 1000000000L;
 		
-		return given;
+		
+		LocalDateTime value = null;
+		
+		if (given.isSupported(ChronoUnit.SECONDS)) {
+			
+			value = LocalDateTime.of(
+			
+					given.get(ChronoField.YEAR), 
+					
+					given.get(ChronoField.MONTH_OF_YEAR), 
+					
+					given.get(ChronoField.DAY_OF_MONTH), 
+					
+					given.get(ChronoField.HOUR_OF_DAY), 
+					
+					given.get(ChronoField.MINUTE_OF_HOUR), 
+					
+					given.get(ChronoField.SECOND_OF_MINUTE));
+			
+		}
+		else {
+			value = LocalDateTime.of(
+					
+					given.get(ChronoField.YEAR), 
+					
+					given.get(ChronoField.MONTH_OF_YEAR), 
+					
+					given.get(ChronoField.DAY_OF_MONTH),
+					0, 0, 0);
+		}
+		
+		value = value.plusSeconds(time);
+		
+		return value;
 	}
 
 	/**
