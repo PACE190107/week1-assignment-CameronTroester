@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,14 +35,22 @@ public class EvaluationService {
 	 * 
 	 * @param phrase
 	 * @return
+	 * 
+	 * 
+	 * O(n)
 	 */
 	public String acronym(String phrase) {
+		
+		//O(n)
 		String[] words = phrase.split("\\W+");
 		
 		String acro = "";
 		
+		//O(n)
 		for (int i = 0; i < words.length; i++) {
+			
 			acro += Character.toString(words[i].charAt(0)).toUpperCase();
+			
 		}
 		
 		return acro;
@@ -55,6 +64,8 @@ public class EvaluationService {
 	 * exercise we'll say at least two.) A scalene triangle has all sides of
 	 * different lengths.
 	 *
+	 *
+	 *O(1)
 	 */
 	static class Triangle {
 		private double sideOne;
@@ -148,6 +159,8 @@ public class EvaluationService {
 	 * 
 	 * @param string
 	 * @return
+	 * 
+	 * O(n)
 	 */
 	public int getScrabbleScore(String string) {
 		
@@ -155,6 +168,7 @@ public class EvaluationService {
 		
 		string = string.toUpperCase();
 		
+		//O(n)
 		for (int i = 0; i < string.length(); i++) {
 			
 			char letter = string.charAt(i);
@@ -249,8 +263,11 @@ public class EvaluationService {
 	 * Note: As this exercise only deals with telephone numbers used in
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
+	
+	//O(n)
 	public String cleanPhoneNumber(String string) {
 		
+		//O(n)
 		String number = string.replaceAll("\\W+", "");
 		
 		if (number.charAt(0) == '1') {
@@ -273,10 +290,16 @@ public class EvaluationService {
 	 * 
 	 * @param string
 	 * @return
+	 * 
+	 * O(n)
 	 */
 	public Map<String, Integer> wordCount(String string) {
+		
+		//O(n)
 		String[] phrase = string.split("\\W+");
+		
 		Map<String, Integer> words = new HashMap<String, Integer>();
+		
 		for (String word : phrase) {
 			
 			if(!words.containsKey(word)) {
@@ -328,10 +351,28 @@ public class EvaluationService {
 	static class BinarySearch <T extends Comparable <T>>{
 		
 		private List<T> sortedList;
+		
+		
 
 		public int indexOf(T t) {
 			
-			return 0;
+			int index = 0;
+			
+			if (sortedList.isEmpty()) {
+				
+				return 0;
+				
+			}
+			
+			else if (sortedList.contains(t)) {
+				
+				index = sortedList.indexOf(t);
+				
+				return index;
+				
+			}
+			
+			return index;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -485,7 +526,68 @@ public class EvaluationService {
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
 		
-		return null;
+		ArrayList<Long> numbers = new ArrayList<Long>();
+		
+		long temp = 1;
+		
+		if (l == 2) {
+			
+			numbers.add(l);
+			
+			return numbers;
+		}
+		
+		int incre = l % 2 == 0 ? 1 : 2;
+		
+		for (long i = 1; i <= Math.sqrt(l); i += incre) {
+			
+			
+			if (isPrime(i) && l % i == 0 && i != 1) {
+				
+				numbers.add(i);
+				
+				if (i * i == l) {
+					
+					numbers.add(i);
+					break;
+					
+				}
+				
+				if (i * i * i == l) {
+					
+					numbers.add(i);
+					numbers.add(i);
+					break;
+					
+				}
+				
+				if (numbers.contains(2L) && temp == 1) {
+					
+					numbers.add(2L);
+					
+					temp++;
+					
+				}
+				
+			}
+			
+		}
+		
+		return numbers;
+	}
+	
+	private static boolean isPrime(long n) {
+		
+	    for(int i = 2; i < n; i++) {
+	    
+	    	if (n % i == 0) {
+	        
+	    		return false;
+	        }
+	    	
+	    }
+	    
+	    return true;
 	}
 
 	/**
@@ -595,7 +697,9 @@ public class EvaluationService {
 		}
 		
 		for (check = 2, count = 0; count < i; check++) {
+			
 			if(isPrime(check)) {
+				
 				count++;
 			}
 		}
@@ -605,11 +709,16 @@ public class EvaluationService {
 	}
 	
 	private static boolean isPrime(int n) {
-	    for(int i = 2; i < n; ++i) {
-	        if (n % i == 0) {
-	            return false;
+		
+	    for(int i = 2; i < n; i++) {
+	    
+	    	if (n % i == 0) {
+	        
+	    		return false;
 	        }
+	    	
 	    }
+	    
 	    return true;
 	}
 
@@ -803,7 +912,48 @@ public class EvaluationService {
 	 */
 	public boolean isValidIsbn(String string) {
 		
-		String [] phrase = string.split("-");
+		string = string.replaceAll("-", "");
+		
+		int count = 10;
+		
+		int sum = 0;
+		
+		int length = 10;
+		
+		while (count > 0) {
+				
+			int value = string.charAt(length - count);
+				
+			if(Character.isDigit(value)) {
+					
+				sum += value * count;
+					
+			}
+			
+			else if (Character.isAlphabetic(value)) {
+				
+				if (value == 'X') {
+					
+					sum += 3 * count;
+					
+				}
+				else {
+					
+					return false;
+					
+				}
+				
+			}
+			
+			count--;
+			
+		}
+		
+		if (sum % 11 == 0) {
+			
+			return true;
+			
+		}
 		
 		return false;
 	}
@@ -872,6 +1022,7 @@ public class EvaluationService {
 			
 		}
 		else {
+			
 			value = LocalDateTime.of(
 					
 					given.get(ChronoField.YEAR), 
@@ -901,8 +1052,30 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		
+		Set<Integer> numbers = new HashSet<Integer>();
+		
+		int value = i;
+		
+		int sum = 0;
+		
+		for (int j = 1; j < value; j++) {
+			
+			for (int k : set) {
+				
+				if(j % k == 0) {
+					numbers.add(j);
+				}
+				
+			}
+			
+		}
+		
+		for (int k : numbers) {
+			sum += k;
+		}
+		
+		return sum;
 	}
 
 	/**
@@ -942,8 +1115,52 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isLuhnValid(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		
+		string = string.replaceAll("\\s+", "");
+		
+		int sum = 0;
+
+		int count = 0;
+
+		char letter;
+
+		int value = 0;
+
+		for (int i = string.length() - 1; i >= 0; i--) {
+			
+			letter = string.charAt(i);
+
+			value = Character.digit(letter, 10);
+
+			count++;
+				
+			if (count % 2 == 0) {
+					
+				value *= 2;
+
+				if (value >= 10) { 
+						
+					value -= 9;
+						
+				}
+			}
+
+			sum += value;
+			
+		}
+		
+		if (sum % 10 == 0) {
+			
+			return true;
+			
+		}
+		
+		else {
+			
+			return false;
+			
+		}
+
 	}
 
 	/**
@@ -972,10 +1189,49 @@ public class EvaluationService {
 	 * 
 	 * @param string
 	 * @return
+	 * 
+	 * O(n)
 	 */
 	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		
+		string = string.substring(0, string.length() - 1);
+		
+		String[] words = string.split("\\s+");
+		
+		int first = Integer.parseInt(words[2]);
+		
+		int second = Integer.parseInt(words[words.length - 1]);
+		
+		int sum = 0;
+		
+		String operan = words[3];
+		
+		switch (operan) {
+			
+		case "plus":
+			
+			sum = first + second;
+			break;
+		
+		case "minus":
+			
+			sum = first - second;
+			break;
+			
+		case "multiplied":
+			
+			sum = first * second;
+			break;
+		
+		case "divided":
+			
+			sum = first / second;
+			break;
+		
+		}
+		
+		
+		return sum;
 	}
 
 }
