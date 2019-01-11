@@ -168,7 +168,6 @@ public class EvaluationService {
 		
 		string = string.toUpperCase();
 		
-		//O(n)
 		for (int i = 0; i < string.length(); i++) {
 			
 			char letter = string.charAt(i);
