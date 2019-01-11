@@ -348,11 +348,9 @@ public class EvaluationService {
 	 * binary search is a dichotomic divide and conquer search algorithm.
 	 * 
 	 */
-	static class BinarySearch <T extends Comparable <T>>{
+	static class BinarySearch <T>{
 		
 		private List<T> sortedList;
-		
-		
 
 		public int indexOf(T t) {
 			
@@ -1196,15 +1194,17 @@ public class EvaluationService {
 		
 		string = string.substring(0, string.length() - 1);
 		
+		string = string.substring(8);
+		
 		String[] words = string.split("\\s+");
 		
-		int first = Integer.parseInt(words[2]);
+		int first = Integer.parseInt(words[0]);
 		
 		int second = Integer.parseInt(words[words.length - 1]);
 		
 		int sum = 0;
 		
-		String operan = words[3];
+		String operan = words[1];
 		
 		switch (operan) {
 			
@@ -1229,7 +1229,6 @@ public class EvaluationService {
 			break;
 		
 		}
-		
 		
 		return sum;
 	}
